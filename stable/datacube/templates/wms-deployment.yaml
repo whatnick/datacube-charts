@@ -6,6 +6,7 @@ kind: Deployment
 {{- $prometheus := .Values.prometheus }}
 {{- $profiling := .Values.profiling }}
 {{- $envname := .Values.global.clusterInfo }}
+{{- $additionalVol := .Values.wms.additionalVolumes }}
 metadata:
   name: "{{ .Release.Name }}-{{ $envname.envName }}-wms"
   labels:
@@ -108,6 +109,11 @@ spec:
         - mountPath: {{ $prometheus.path }}
           name: prometheus-volume
 {{- end }}
+{{- if $additionalVol.enabled }}
+        - mountPath: {{ $additionalVol.mountPath }}
+          name: additional-volume
+          readOnly: true
+{{- end }}
 {{- if $profiling.enabled }}
         - mountPath: {{ $profiling.path }}
           name: profiling-volume
@@ -125,6 +131,11 @@ spec:
 {{- if $profiling.enabled }}
       - name: profiling-volume
         emptyDir: {}
+{{- end }}
+{{- if $additionalVol.enabled }}
+      - name: additional-volume
+        secret:
+          secretName: {{ $additionalVol.secret }}
 {{- end }}
 {{- if or .Values.wmsConfig.configMap .Values.wmsConfig.image }}
       - name: wms-config-volume

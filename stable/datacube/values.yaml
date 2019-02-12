@@ -33,6 +33,10 @@ wms:
   autoscaling: True
   annotations:
     iam.amazonaws.com/role: kubernetes-wms
+  additionalVolumes:
+    enabled: true
+    mountPath: /opt/google/
+    secret: google-svc
 wmsConfig:
   image: { }
 
@@ -55,6 +59,7 @@ profiling:
 ## DB setup config
 ##
 setup:
+  enabled: true
   dockerArgs: [ "/bin/bash", "-c", "cd setup; ./create-db.sh" ]
 
 ##
