@@ -49,6 +49,18 @@ wmsConfig:
   image: { }
 
 ##
+## Pyspy Monitoring
+##
+pyspy:
+  enabled: true
+  path: "/opt/pyspy"
+  image:
+    repository: geoscienceaustralia/pyspy
+    tag: 0.1.1-unstable.6.g562f3e9
+    pullPolicy: IfNotPresent
+
+
+##
 ## Prometheus Monitoring
 ##
 prometheus:
